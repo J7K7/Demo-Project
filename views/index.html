@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Frontend Project</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Link to Custom CSS -->
+  <link rel="stylesheet" href="/styles/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Add custom transition for the carousel images */
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .carousel-image {
+      transition: transform 1s ease-in-out, opacity 1s ease-in-out; /* Smooth sliding and opacity transition */
+    }
+
+    /* Hide all images initially except the active one */
+    .carousel-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .carousel-item.active {
+      opacity: 1;
+    }
+
+    /* Tilted transparent rectangle on the right */
+    .carousel-top {
+      position: absolute;
+      top: 0;
+      right: -60px;
+      width: 50%; /* Half of the carousel's width */
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Transparent black background */
+      transform: skewX(-10deg); /* Tilt the rectangle */
+      z-index: 2; /* Ensure the rectangle sits above the carousel images */
+    }
+
+    /* Text inside the tilted rectangle */
+    .carousel-quote {
+      position: absolute;
+      bottom: 10%; /* Text is placed towards the bottom */
+      left: 10%;
+      color: white;
+      font-size: 2.5rem; /* Larger text */
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Text shadow for visibility */
+      max-width: 80%; /* Prevent text from overflowing */
+    }
+
+    .relative {
+      overflow-x: hidden; /* Prevent horizontal scrollbar */
+    }
+
+    /* Optional responsiveness */
+    @media (max-width: 768px) {
+      .carousel-top {
+        width: 100%; /* Full width for mobile */
+        transform: skewX(0deg); /* Remove tilt for smaller screens */
+      }
+
+      .carousel-quote {
+        font-size: 1.5rem; /* Smaller text on mobile */
+      }
+    }
+
+    .navbar {
+      transition: background-color 0.3s ease-in-out;
+    }
+    .navbar-black {
+      background-color: black !important;
+    }
+
+    .navbar-black .navbar a,
+    .navbar-black .navbar span {
+      color: white !important; /* Navbar links color change to white */
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header Section -->
+  <nav id="navbar" class="navbar bg-white border-gray-200 dark:bg-gray-900 fixed top-0 left-0 w-full z-10" style="height: 84px;">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 h-full">
+      <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+          <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+          <span class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+      </a>
+      <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+          </svg>
+      </button>
+      <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+        <ul id="ul-navbar" class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <li><a href="#" id="li-navbar" class="block py-3 px-4 text-2xl text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Home</a></li>
+          <li><a href="#" id="li-navbar" class="block py-3 px-4 text-2xl text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">About</a></li>
+          <li><a href="#gallery" id="li-navbar" class="block py-3 px-4 text-2xl text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Gallery</a></li>
+          <li><a href="#" id="li-navbar" class="block py-3 px-4 text-2xl text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Section -->
+  <main class="max-w-7xl mx-auto p-0 mt-0">
+    <section class="text-center">
+      <div id="animation-carousel" class="relative w-full -mt-4" data-carousel="slide">
+        <!-- Carousel wrapper -->
+        <div class="relative h-[70vh] overflow-hidden"> <!-- Height set to 70% of the screen height -->
+            <!-- Item 1 -->
+            <div class="carousel-item active" data-carousel-item>
+                <img src="/images/carousel/carousel-1.jpg" class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 carousel-image" alt="Image 1">
+            </div>
+            <!-- Item 2 -->
+            <div class="carousel-item" data-carousel-item>
+                <img src="/images/carousel/carousel-2.jpg" class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 carousel-image" alt="Image 2">
+            </div>
+            <!-- Item 3 -->
+            <div class="carousel-item" data-carousel-item>
+                <img src="/images/carousel/carousel-3.jpg" class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 carousel-image" alt="Image 3">
+            </div>
+            <!-- Item 4 -->
+            <div class="carousel-item" data-carousel-item>
+                <img src="/images/carousel/carousel-4.jpg" class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 carousel-image" alt="Image 4">
+            </div>
+            <!-- Item 5 -->
+            <div class="carousel-item" data-carousel-item>
+                <img src="/images/carousel/carousel-5.jpg" class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 carousel-image" alt="Image 5">
+            </div>
+        </div>
+
+        <!-- Tilted Transparent Rectangle covering right side -->
+        <div class="carousel-top">
+          <div id="carousel-quote" class="carousel-quote">
+            "Transforming Your Events with Elegance – Furnishing Dreams for Weddings, Parties, and Celebrations!"
+          </div>
+        </div>
+
+        <!-- Slider indicators -->
+        <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
+        </div>
+
+        <!-- Slider controls -->
+        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                </svg>
+                <span class="sr-only">Previous</span>
+            </span>
+        </button>
+        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+                <span class="sr-only">Next</span>
+            </span>
+        </button>
+    </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-12 md:py-16 px-4">
+      <div class="text-center mb-12">
+        <!-- Title with underline -->
+        <h2 class="text-4xl font-extrabold text-gray-700 relative inline-block overflow-hidden">
+          About
+          <span class="absolute bottom-0 left-0 w-full h-0.5 bg-black mt-2"></span> <!-- Thinner black line -->
+        </h2>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8 mx-auto max-w-screen-xl">
+        <!-- Left side - About image -->
+        <div class="md:w-1/2">
+          <img src="/images/about/about.jpg" alt="About Image" class="w-full h-auto rounded-lg shadow-lg">
+        </div>
+
+        <!-- Right side - About text -->
+        <div class="md:w-1/2 text-lg text-gray-700 leading-relaxed space-y-4">
+          <h3 class="text-2xl font-semibold text-gray-900 mb-4">Who We Are and What We Do</h3>
+          <p>
+            We are a dynamic event furniture rental company specializing in transforming your events with elegance and style. Whether it's a wedding, corporate event, or intimate gathering, we provide beautiful furniture and accessories that set the perfect atmosphere for any occasion. We pride ourselves on exceptional customer service and attention to detail, ensuring that every event is a success from start to finish.
+          </p>
+          <p>
+            Our goal is to make your event memorable by providing high-quality, stylish, and functional furniture that reflects your unique vision. From concept to execution, we work closely with our clients to ensure their event is as flawless and enjoyable as possible.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="py-12 md:py-16 px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-700 relative inline-block overflow-hidden">
+          Gallery
+          <span class="absolute bottom-0 left-0 w-full h-0.5 bg-black mt-2"></span>
+        </h2>
+      </div>
+    
+      <div class="container mx-auto p-4">
+        <!-- Gallery Section -->
+        <div class="relative">
+          <!-- Slider Wrapper -->
+          <div class="overflow-hidden">
+            <div id="gallerySlider" class="flex transition-transform duration-500">
+              <!-- First set of 6 images -->
+              <div class="flex-none w-full px-2">
+                <div class="grid grid-cols-3 gap-4">
+                  <div><img src="/images/gallery/image1.jpg" alt="Image 1" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image2.jpg" alt="Image 2" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image3.jpg" alt="Image 3" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image4.jpg" alt="Image 4" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image5.jpg" alt="Image 5" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image6.jpg" alt="Image 6" class="w-full h-48 object-cover rounded-lg"></div>
+                </div>
+              </div>
+      
+              <!-- Second set of 6 images -->
+              <div class="flex-none w-full px-2">
+                <div class="grid grid-cols-3 gap-4">
+                  <div><img src="/images/gallery/image7.jpg" alt="Image 7" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image8.jpg" alt="Image 8" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image9.jpg" alt="Image 9" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image10.jpg" alt="Image 10" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image11.jpg" alt="Image 11" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image12.jpg" alt="Image 12" class="w-full h-48 object-cover rounded-lg"></div>
+                </div>
+              </div>
+      
+              <!-- Third set of 6 images -->
+              <div class="flex-none w-full px-2">
+                <div class="grid grid-cols-3 gap-4">
+                  <div><img src="/images/gallery/image13.jpg" alt="Image 13" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image14.jpg" alt="Image 14" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image15.jpg" alt="Image 15" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image16.jpg" alt="Image 16" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image17.jpg" alt="Image 17" class="w-full h-48 object-cover rounded-lg"></div>
+                  <div><img src="/images/gallery/image18.jpg" alt="Image 18" class="w-full h-48 object-cover rounded-lg"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Previous and Next buttons (as above) -->
+          <button id="prevBtn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-800">
+              <span class="text-lg">&lt;</span> <!-- Smaller arrow -->
+          </button>
+          <button id="nextBtn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-800">
+              <span class="text-lg">&gt;</span> <!-- Smaller arrow -->
+          </button>
+        
+        
+        </div>
+      </div>
+      
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+<!-- Footer Section -->
+<!-- Footer Section -->
+<footer class="bg-gray-800 text-white p-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+    <!-- Left Column: Contact Details and Location -->
+    <div class="flex flex-col justify-between">
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+        <ul class="space-y-3">
+          <li class="flex items-center space-x-2">
+            <!-- LinkedIn Icon -->
+            <a href="https://www.linkedin.com/in/yourprofile" class="text-white hover:text-blue-800" target="_blank">
+              <i class="fab fa-linkedin fa-2x"></i> LinkedIn
+            </a>
+          </li>
+          <li class="flex items-center space-x-2">
+            <!-- Instagram Icon -->
+            <a href="https://www.instagram.com/yourprofile" class="text-white hover:text-pink-800" target="_blank">
+              <i class="fab fa-instagram fa-2x"></i> Instagram
+            </a>
+          </li>
+          <li class="flex items-center space-x-2">
+            <!-- Facebook Icon -->
+            <a href="https://www.facebook.com/yourprofile" class="text-white hover:text-blue-700" target="_blank">
+              <i class="fab fa-facebook fa-2x"></i> Facebook
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Location Section -->
+      <div>
+        <h3 class="text-xl font-semibold mt-8 mb-4">Our Location</h3>
+        <!-- Embed Google Maps iframe -->
+        <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <!-- Right Column: Contact Us Form -->
+    <div class="flex flex-col justify-between">
+      <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
+      <form action="/submit-contact-form" method="POST" class="space-y-6">
+        
+        <div>
+          <label for="name" class="block text-white text-lg mb-2">Name</label>
+          <input type="text" id="name" name="name" class="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+
+        <div>
+          <label for="email" class="block text-white text-lg mb-2">Email</label>
+          <input type="email" id="email" name="email" class="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+
+        <div>
+          <label for="contact" class="block text-white text-lg mb-2">Contact Number</label>
+          <input type="text" id="contact" name="contact" class="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+
+        <div>
+          <label for="reason" class="block text-white text-lg mb-2">Reason for Contact</label>
+          <textarea id="reason" name="reason" class="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600" required></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">Submit</button>
+      </form>
+    </div>
+
+  </div>
+    
+  <p class="text-center mt-8">&copy; 2024 My Project</p>
+</footer>
+
+
+
+
+
+  <!-- JavaScript for Carousel and Dynamic Quote -->
+  <script>
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.carousel-item');
+    const totalItems = items.length;
+    
+    const quotes = [
+      "Transforming Your Events with Elegance – Furnishing Dreams for Weddings, Parties, and Celebrations!",
+      "Creating Unforgettable Experiences with Exquisite Furniture – For Weddings, Corporate Events, and More!",
+      "Furnishing Moments of Joy – Providing Elegant Furniture for Every Event, Big or Small!",
+      "From Weddings to Corporate Events, We Provide the Perfect Furnishings to Elevate Every Celebration!",
+      "Turning Your Event Vision into Reality – With Beautiful Furniture for Weddings, Parties, and More!"
+    ];
+
+    const quoteElement = document.getElementById('carousel-quote');
+
+    function showItem(index) {
+      items.forEach((item, i) => {
+        item.classList.remove('active');
+        if (i === index) {
+          item.classList.add('active');
+        }
+      });
+      // Change the quote based on the index
+      quoteElement.textContent = quotes[index];
+    }
+
+    function nextItem() {
+      currentIndex = (currentIndex + 1) % totalItems;
+      showItem(currentIndex);
+    }
+
+    function prevItem() {
+      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+      showItem(currentIndex);
+    }
+
+    document.querySelector('[data-carousel-next]').addEventListener('click', nextItem);
+    document.querySelector('[data-carousel-prev]').addEventListener('click', prevItem);
+
+    // Automatically change image and quote every 3 seconds
+    setInterval(nextItem, 3000);
+
+    // Ensure the first item is visible at the start
+    showItem(currentIndex);
+  </script>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    const ulNavbar = document.getElementById('ul-navbar');
+    const navbarLinks = document.querySelectorAll('#ul-navbar li a');
+    const carouselPrevButton = document.querySelector('[data-carousel-prev]');
+    const carouselNextButton = document.querySelector('[data-carousel-next]');
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 50) {
+        navbar.classList.add('bg-black', 'text-white');  // Add the classes to change navbar to black and text to white
+        navbar.classList.add('md:bg-black', 'md:bg-white');
+        ulNavbar.classList.add('md:bg-black');
+        navbarLinks.forEach(link => {
+          link.classList.add('text-white');
+          link.classList.remove('text-gray-900');
+        });
+
+        carouselPrevButton.classList.add('hidden');  // Hide previous button
+        carouselNextButton.classList.add('hidden');
+      } else {
+        navbar.classList.remove('bg-black', 'text-white');  // Remove classes when scrolled back to top
+        navbar.classList.remove('md:bg-black', 'md:bg-white');
+        ulNavbar.classList.remove('md:bg-black');
+        navbarLinks.forEach(link => {
+          link.classList.remove('text-white');
+          link.classList.add('text-gray-900');
+        });
+
+        carouselPrevButton.classList.remove('hidden');  // Show previous button
+        carouselNextButton.classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <!-- JavaScript for rotating the gallery -->
+  <script>
+    let galleryIndex = 0; // Tracks which set of images is visible
+    const gallerySlider = document.getElementById('gallerySlider');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    const galleryItems = document.querySelectorAll('#gallerySlider .flex-none'); // Get all image sets
+    const totalGalleryItems = galleryItems.length;
+
+    // Function to move the gallery images to the left
+    function moveGallery(direction) {
+      galleryIndex = (galleryIndex + direction + totalGalleryItems) % totalGalleryItems;  // Wrap around at the edges
+      gallerySlider.style.transform = `translateX(-${galleryIndex * 100}%)`; // Move gallery by 100%
+    }
+
+    // Attach events to buttons
+    prevBtn.addEventListener('click', () => moveGallery(-1)); // Move left
+    nextBtn.addEventListener('click', () => moveGallery(1));  // Move right
+
+    // Auto slide every 3 seconds (optional)
+    setInterval(() => moveGallery(1), 3000);
+
+  </script>
+
+</body>
+</html>

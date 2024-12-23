@@ -1,0 +1,9 @@
+/* Custom Styles */
+body {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  header {
+    border-bottom: 3px solid #2b6cb0; /* Blue border under the header */
+  }
+  
